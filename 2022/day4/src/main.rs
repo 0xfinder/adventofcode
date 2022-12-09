@@ -1,6 +1,12 @@
 use std::fs;
 
 fn main() {
+    println!("{:?}", part_one());
+
+    println!("{:?}", part_two());
+}
+
+fn part_one() -> i32 {
     let input = fs::read_to_string("input.txt").expect("Error reading file");
     let lines: Vec<&str> = input.split("\r\n").collect();
 
@@ -8,21 +14,23 @@ fn main() {
 
     for line in lines {
         let v: Vec<_> = line.split(&[',', '-'][..]).collect();
-        println!("{:?}", v);
         let v: Vec<i32> = v.into_iter().map(|x| x.parse::<i32>().unwrap()).collect();
-        // if (v[0] <= v[2] && v[1] >= v[3]) || (v[0] >= v[2] && v[1] <= v[3]) {
-        //     count += 1;
-        // }
-        // if (v[0] <= v[3] && v[2] <= v[1]) || (v[2] <= v[1] && v[0] <= v[3]) {
-        //     count += 1;
-        // }
-        let range1 = v[0]..v[1];
-        let range2 = v[2]..v[3];
-
-        if range1.all(|x| range2.contains(&x)) || range2.all(|x| range2.contains(&x)) {
+        if (v[0] <= v[2] && v[1] >= v[3]) || (v[0] >= v[2] && v[1] <= v[3]) {
             count += 1;
         }
     }
 
-    println!("{}", count);
+    count
+}
+fn part_two() -> usize {
+    let input = fs::read_to_string("input.txt").expect("Error reading file");
+
+    input
+        .lines()
+        .filter(|line| {
+            let v: Vec<_> = line.split(&[',', '-'][..]).collect();
+            let v: Vec<i32> = v.into_iter().map(|x| x.parse::<i32>().unwrap()).collect();
+            v[0] <= v[3] && v[1] >= v[2]
+        })
+        .count()
 }
